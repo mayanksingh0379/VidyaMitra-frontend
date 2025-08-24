@@ -5,6 +5,7 @@ import About from './pages/About';
 import Careers from './pages/Careers';
 import Resources from './pages/Resources';
 import './styles/global.css';
+import Footer from './components/Footer';
 
 // No forced theme — use global CSS as provided in `src/styles/global.css`
 
@@ -69,7 +70,9 @@ export default function App() {
             <Route path="/careers" element={<Careers />} />
           </Routes>
         </div>
-      </main>
+  </main>
+
+  <Footer />
     </div>
   );
 }

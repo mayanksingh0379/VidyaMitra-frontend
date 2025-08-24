@@ -10,7 +10,8 @@ function Home() {
       <header className="home-hero">
         <h1 className="home-greeting">Meet VidyaMitra</h1>
         <p className="home-subtitle">
-          Quick, friendly AI guidance for students planning their next step after Class 10 or 12. Get personalised suggestions on careers, subject choices, and practical next steps — no jargon, just clear advice you can act on.
+          <p>Quick, friendly AI guidance for students planning their next step after Class 10 or 12.</p>
+          <p>Get personalised suggestions on careers, subject choices, and practical next steps — no jargon, just clear advice you can act on.</p>
         </p>
       </header>
 
