@@ -1,0 +1,168 @@
+/* =============================================================
+   Global Dark Theme (Lovable.dev-inspired) for React App
+   - Dark background with elegant gradient backdrop
+   - Professional yet friendly (career guidance vibe)
+   - Smooth transitions, rounded corners, subtle glowing effects
+   ============================================================= */
+
+/* Google Font: Inter (modern & readable) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+/* ------------------------
+   CSS Reset / Base
+------------------------- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #root { height: 100%; }
+html:focus-within { scroll-behavior: smooth; }
+
+:root {
+  /* Colors */
+  --bg: #0d0d10;                 /* deep dark background */
+  --surface: #16161a;            /* card base */
+  --ink: #e5e5e5;                /* primary text */
+  --ink-muted: #9ca3af;          /* secondary text */
+
+  --primary: #4f46e5;            /* indigo */
+  --primary-600: #4338ca;
+  --primary-700: #3730a3;
+
+  --accent: #22c55e;             /* green for positivity */
+  --highlight: #38bdf8;          /* cyan highlight */
+
+  /* FX */
+  --radius-sm: 10px;
+  --radius: 16px;
+  --radius-lg: 22px;
+  --shadow: 0 6px 20px rgba(0,0,0,0.45);
+  --shadow-lg: 0 14px 40px rgba(0,0,0,0.6);
+  --transition: 240ms cubic-bezier(.2,.8,.2,1);
+  --maxw: 1200px;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--ink);
+  background: radial-gradient(at 20% 30%, #1a1a2e 0%, transparent 60%),
+              radial-gradient(at 80% 20%, #111827 0%, transparent 60%),
+              linear-gradient(180deg, #0d0d10, #111111);
+  background-attachment: fixed;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ------------------------
+   Layout helpers
+------------------------- */
+.container { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 1rem; }
+.main { padding: 2rem 0 4rem; }
+.section { padding: 3rem 0; }
+
+.section__title {
+  font-size: clamp(1.8rem, 2.6vw, 2.5rem);
+  font-weight: 800;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, var(--primary), var(--highlight));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.section__subtitle {
+  color: var(--ink-muted);
+  max-width: 70ch;
+  margin-inline: auto;
+}
+
+/* ------------------------
+   Nav (sticky, minimal underline)
+------------------------- */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(13,13,16,0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.nav__wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .9rem 1rem; }
+.brand { font-weight: 800; font-size: 1.2rem; color: var(--ink); }
+
+.nav__links { display: flex; gap: 1rem; }
+.nav__link { position: relative; text-decoration: none; padding: .5rem .8rem; color: var(--ink-muted); font-weight: 600; transition: color var(--transition); }
+.nav__link:hover { color: var(--ink); }
+.nav__link.active { color: var(--primary); }
+
+/* ------------------------
+   Cards & Surfaces
+------------------------- */
+.card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 1.4rem 1.6rem;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+/* ------------------------
+   Buttons
+------------------------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border: none; cursor: pointer; border-radius: var(--radius); font-weight: 700; padding: .8rem 1.2rem; transition: transform var(--transition), background var(--transition); }
+.btn:active { transform: scale(0.98); }
+
+.btn--primary { color: white; background: linear-gradient(135deg, var(--primary), var(--primary-600)); }
+.btn--primary:hover { background: linear-gradient(135deg, var(--primary-600), var(--primary-700)); }
+.btn--secondary { background: #1f2937; color: var(--ink); border: 1px solid rgba(255,255,255,0.1); }
+
+/* ------------------------
+   Inputs (chatbox, forms)
+------------------------- */
+.input {
+  width: 100%;
+  background: #111827;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius);
+  padding: .9rem 1rem;
+  color: var(--ink);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,70,229,0.4); outline: none; }
+
+/* ------------------------
+   Chatbot area
+------------------------- */
+.chatbot {
+  max-width: 900px; margin: 2rem auto; padding: 1rem; border-radius: var(--radius-lg);
+  background: rgba(22,22,26,0.9);
+  border: 1px solid rgba(255,255,255,0.05);
+  box-shadow: var(--shadow);
+}
+.chatbot__stream { display: grid; gap: .7rem; max-height: 60vh; overflow-y: auto; }
+.msg { display: inline-flex; max-width: 75%; padding: .7rem 1rem; border-radius: 16px; line-height: 1.4; }
+.msg--bot { background: #1e293b; color: var(--ink); border-top-left-radius: 6px; }
+.msg--you { background: #374151; color: var(--ink); border-top-right-radius: 6px; margin-left: auto; }
+
+.chatbot__input { display: grid; grid-template-columns: 1fr auto; gap: .6rem; padding-top: .8rem; border-top: 1px solid rgba(255,255,255,0.05); }
+
+/* ------------------------
+   Animations
+------------------------- */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(270deg, #1e3a8a, #4f46e5, #0f766e);
+  background-size: 600% 600%;
+  z-index: -1;
+  animation: gradientShift 20s ease infinite;
+  opacity: 0.15;
+}
+
+/* ------------------------
+   Footer
+------------------------- */
+.footer { margin-top: 3rem; padding: 2rem 0; color: var(--ink-muted); text-align: center; font-size: .9rem; }
