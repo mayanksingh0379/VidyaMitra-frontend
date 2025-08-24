@@ -22,8 +22,8 @@ function About() {
   const team = [
     {
       name: 'Mayank Singh',
-      role: 'Founder',
-      bio: 'Designing friendly, practical guidance for students.',
+  role: 'Founder',
+  bio: 'Leading the vision, strategy, and product direction to build practical guidance for students.',
       socials: [
         { label: 'LinkedIn', url: 'https://www.linkedin.com/in/mayank-r-singh/', icon: '🔗' },
         { label: 'Instagram', url: 'https://www.instagram.com/mayanksingh.gg/', icon: '�' }
@@ -31,8 +31,8 @@ function About() {
     },
     {
       name: 'Pratik Wadekar',
-      role: 'Strategic Partner',
-      bio: 'Building product and engineering to ship delightful experiences.',
+  role: 'Strategic Partner',
+  bio: 'Contributing across product, design, and execution to bring ideas to life and support the mission.',
       socials: [
         { label: 'LinkedIn', url: 'https://www.linkedin.com/in/pratik-wadekar-84468037b/', icon: '�' }
       ]
