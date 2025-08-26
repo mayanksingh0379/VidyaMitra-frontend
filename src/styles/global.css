@@ -507,6 +507,34 @@ html::after {
 .team-socials a { color: inherit; text-decoration: none; }
 
 /* ------------------------
+   Careers grid and card adjustments
+   - increase spacing between cards
+   - reduce card width and increase padding
+------------------------- */
+.careers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem 1.5rem; /* vertical and horizontal gap */
+  margin-top: 1.5rem;
+}
+
+.career-card {
+  cursor: pointer;
+  padding: 1.25rem; /* slightly larger padding inside each card */
+  max-width: 420px; /* reduce width on large screens for a slimmer card */
+  margin: 0 auto; /* center within grid cell */
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@media (max-width: 560px) {
+  .careers-grid { grid-template-columns: 1fr; gap: 0.9rem; }
+  .career-card { max-width: none; padding: 1rem; border-radius: 16px; }
+}
+
+/* ------------------------
    Buttons
 ------------------------- */
 .btn { 

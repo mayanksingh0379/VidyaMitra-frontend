@@ -1,12 +1,18 @@
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Chatbot from '../Chatbot';
+import SEO from '../components/SEO';
 
 function Home() {
   const chatbotRef = useRef(null);
 
   return (
     <div>
+      <SEO
+        title="Home"
+        description="Quick, friendly AI guidance for students planning their next step after Class 10 or 12."
+        url="/"
+      />
       <header className="home-hero">
         <h1 className="home-greeting">Meet VidyaMitra</h1>
         <p className="home-subtitle">
