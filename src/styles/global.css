@@ -57,6 +57,73 @@ html:focus-within { scroll-behavior: smooth; }
   --maxw: 1200px;
 }
 
+/* Centered resources search container */
+.resources-search { text-align: left; }
+@media (max-width: 600px) { .resources-search { padding: 0 0.25rem; } }
+
+/* Search bar and match badge styles (deep search) */
+.search-bar { display: flex; gap: 0.5rem; align-items: center; }
+.search-bar { width: 100%; }
+.search-input {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 800px;
+  min-width: 520px;
+  padding: 1.1rem 2rem;
+  border-radius: 2rem;
+  border: 2px solid #d1d5db; /* soft grey border */
+  background: #fff;
+  color: #374151;
+  font-size: 1.15rem;
+  box-shadow: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  text-align: center;
+}
+.search-input::placeholder {
+  color: #9ca3af;
+  font-size: 1.08rem;
+}
+.search-input:hover,
+.search-input:focus {
+  border-color: #a1a1aa;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  outline: none;
+}
+.resources-search {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.search-count { margin-left: 4px; color: rgba(230,238,248,0.75); font-size: 0.9rem; }
+.match-badge {
+  background: linear-gradient(90deg, var(--accent), var(--primary));
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  min-width: 28px;
+  text-align: center;
+}
+.search-bar .btn {
+  padding: 0.5rem 0.8rem;
+  font-size: 0.9rem;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+  color: #e6eef8;
+  border-radius: 10px;
+}
+.search-bar .btn:hover { background: rgba(255,255,255,0.04); transform: none; box-shadow: none; }
+
+@media (max-width: 600px) {
+  .search-bar { flex-direction: column; align-items: stretch; }
+  .search-bar .btn { width: auto; }
+  .search-count { margin-left: 0; margin-top: 0.35rem; }
+}
+
+/* Make careers-grid match Careers page spacing and layout more closely */
+.careers-grid { gap: 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
 body {
   font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--ink);
@@ -529,6 +596,18 @@ html::after {
   gap: 0.5rem;
 }
 
+/* exam/career open state highlight */
+.exam-card.is-open {
+  transform: translateY(-8px);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.45);
+  border-color: rgba(255,107,53,0.18);
+}
+
+.career-card .exam-details,
+.career-card .skill-details {
+  color: inherit;
+}
+
 @media (max-width: 560px) {
   .careers-grid { grid-template-columns: 1fr; gap: 0.9rem; }
   .career-card { max-width: none; padding: 1rem; border-radius: 16px; }
@@ -918,6 +997,127 @@ a:not(.nav__link):not(.btn):not(.mission-step):hover::after {
   background: #f3f4f6;
   border-radius: 6px;
 }
+
+/* ==========================
+   Resources page specific styles
+   Dark theme, accordion and skill cards
+   ========================== */
+
+
+.accordion { display: grid; gap: 0.75rem; }
+.accordion__item { border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); }
+.accordion__header { background: transparent; padding: 1rem 1.25rem; }
+.accordion__header.is-open { background: linear-gradient(90deg, rgba(255,107,53,0.06), rgba(124,58,237,0.04)); }
+.accordion__panel { background: transparent; color: var(--ink-muted); padding: 0 1.25rem 0; }
+
+/* Skill grid */
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.skill-card {
+  padding: 1rem 1.25rem;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+  color: white;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.skill-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 10px 30px rgba(0,0,0,0.45); }
+
+/* Dark background for full page (applies to the resources route) */
+body[data-page="resources"] {
+  background: linear-gradient(180deg, #071023 0%, #0b0f1a 40%, #06060a 100%);
+  color: #e6eef8;
+}
+
+/* Ensure main container is transparent so body background shows through */
+.resources-page { background: transparent; padding: 2.5rem 0 3rem; }
+
+/* smaller link style inside cards */
+.skill-card a { color: var(--highlight); text-decoration: none; }
+.skill-card a:hover { text-decoration: underline; }
+
+/* Smooth expand/collapse for accordion content */
+.accordion__panel { transition: max-height 360ms ease, padding 260ms ease; }
+
+@media (max-width: 560px) {
+  .accordion__header { padding: 0.9rem 1rem; }
+  .skill-grid { gap: 0.8rem; }
+}
+
+/* ==========================
+   Mobile / Resources tweaks
+   - single column grids, larger touch targets
+   - reduced vertical padding and font-size tweaks
+   - smoother accordion behavior on small screens
+   ========================== */
+@media (max-width: 600px) {
+  /* tighter container padding for phones, but keep comfortable side gutters */
+  .container { padding: 0 1rem; }
+
+  /* reduce main vertical padding so content sits higher on small screens */
+  .main { padding: 3rem 0 1.5rem; }
+
+  /* hero tweaks for small screens */
+  .home-hero { padding: 1.25rem 0 0; text-align: left; }
+  .home-greeting {
+    font-size: clamp(1.6rem, 9vw, 2.6rem);
+    margin-bottom: 0.5rem;
+  }
+  .section__subtitle { font-size: 1rem; margin-top: 0.35rem; text-align: left; }
+  .section__title { font-size: clamp(1.4rem, 7vw, 2rem); }
+
+  /* Force exam and skill grids to single column on phones for readability */
+  .careers-grid, .skill-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+
+  /* Make cards easier to tap and more compact */
+  .career-card.card {
+    padding: 0.9rem 0.9rem;
+    border-radius: 12px;
+    min-height: 56px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .career-card .exam-details {
+    overflow: hidden;
+    transition: max-height 360ms ease, padding 220ms ease;
+    max-height: 0; /* collapsed by default; JS/inline styles control open state */
+  }
+
+  /* When card has explicit is-open class (from JS), ensure details expand fluidly */
+  .career-card.is-open .exam-details {
+    max-height: 600px; /* large enough for content without clipping */
+    padding-bottom: 1rem;
+  }
+
+  .career-card h3 { font-size: 1rem; }
+  .career-card small { display: block; margin-top: 4px; color: var(--ink-muted); }
+
+  /* Links should wrap and be easy to read */
+  .career-card a { word-break: break-word; color: var(--primary); text-decoration: none; }
+
+  /* Slightly reduce the decorative ::before on cards to preserve space */
+  .card::before { height: 3px; }
+
+  /* Increase touch target for toggles */
+  .nav__link { padding: 0.75rem 1rem; }
+}
+
+/* Extra-small phones — minor tweaks for cramped displays */
+@media (max-width: 420px) {
+  .home-greeting { font-size: 1.8rem; }
+  .section__subtitle { font-size: 0.95rem; }
+  .career-card.card { padding: 0.75rem; }
+}
+
+/* End mobile tweaks */
 
 ::-webkit-scrollbar-thumb {
   background: var(--gradient-primary);
