@@ -1,42 +1,67 @@
 import React, { useState, useRef, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 
 export default function Chatbot() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
   const streamRef = useRef(null);
 
-  // Handle sending message to backend
+  // Streaming message handler
   const sendMessage = async () => {
     if (!input.trim()) return;
+    setLoading(true);
 
-    // Add user message to chat
-    const newMessages = [...messages, { sender: "user", text: input }];
+    // Add user message and empty bot message for streaming
+    const newMessages = [...messages, { sender: "user", text: input }, { sender: "bot", text: "" }];
     setMessages(newMessages);
     setInput("");
 
     try {
-      const response = await fetch("http://localhost:8080/chat", {
+      // include saved Google token (if available) in Authorization header
+      const token = localStorage.getItem('googleToken');
+      const res = await fetch("http://localhost:8080/api/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: Object.assign({ "Content-Type": "application/json" }, token ? { Authorization: `Bearer ${token}` } : {}),
         body: JSON.stringify({ message: input }),
       });
 
-      const data = await response.json();
-      if (data.reply) {
-        setMessages([...newMessages, { sender: "bot", text: data.reply }]);
-      } else {
-        setMessages([
-          ...newMessages,
-          { sender: "bot", text: "⚠️ No reply from server." },
-        ]);
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+      let aiResponse = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        aiResponse += decoder.decode(value, { stream: true });
+
+        // If backend streams JSON objects (or the full body is JSON), try to parse
+        let display = aiResponse;
+        try {
+          const parsed = JSON.parse(aiResponse);
+          if (parsed && typeof parsed.reply === 'string') {
+            display = parsed.reply;
+          }
+        } catch (e) {
+          // not JSON yet — keep raw accumulated text
+        }
+
+        // Update latest bot message as stream progresses with parsed reply when available
+        setMessages((prev) => {
+          const updated = [...prev];
+          updated[updated.length - 1].text = display;
+          return updated;
+        });
       }
     } catch (error) {
       console.error("Error sending message:", error);
-      setMessages([
-        ...newMessages,
-        { sender: "bot", text: "❌ Server error. Check backend." },
-      ]);
+      setMessages((prev) => {
+        const updated = [...prev];
+        updated[updated.length - 1].text = "❌ Server error. Check backend.";
+        return updated;
+      });
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -59,30 +84,34 @@ export default function Chatbot() {
 
         <div className="chatbot__body">
           <div className="chatbot__stream" ref={streamRef}>
-        {messages.map((msg, i) => (
-          <div key={i} className={`msg ${msg.sender === "user" ? "msg--you" : "msg--bot"}`}>
-            {msg.sender === "bot" && <div className="msg__avatar" />}
-            <div>{msg.text}</div>
-          </div>
-        ))}
+            {messages.map((msg, i) => (
+              <div 
+                key={i} 
+                className={`message ${msg.sender === "user" ? "user" : "bot"}`}
+              >
+                {msg.sender === "bot" && <div className="msg__avatar" />}
+                <ReactMarkdown>{msg.text}</ReactMarkdown>
+              </div>
+            ))}
           </div>
 
           <div className="chatbot__input">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => {
-            if (e.key === 'Enter') {
-              sendMessage();
-            }
-          }}
-          className="input"
-          placeholder={"Tell me what excites you, and I’ll show you careers you’ll love…"}
-        />
-        <button onClick={sendMessage} className="btn btn--primary">
-          Send
-        </button>
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter' && !loading) {
+                  sendMessage();
+                }
+              }}
+              className="input"
+              placeholder={"Tell me what excites you, and I’ll show you careers you’ll love…"}
+              disabled={loading}
+            />
+            <button onClick={sendMessage} className="btn btn--primary" disabled={loading}>
+              {loading ? "Thinking..." : "Send"}
+            </button>
           </div>
         </div>
       </div>
