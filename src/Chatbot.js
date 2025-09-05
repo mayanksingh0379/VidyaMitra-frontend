@@ -18,54 +18,30 @@ export default function Chatbot() {
     setInput("");
 
     try {
-  // include saved Google token (if available) in Authorization header
-  const token = localStorage.getItem("googleToken");
+      // include saved Google token (if available) in Authorization header
+      const token = localStorage.getItem("googleToken");
 
-  // pick backend URL: use env var in production, fallback to localhost in dev
-  const backendUrl =
-    process.env.REACT_APP_BACKEND_URL || "http://localhost:8080";
+      // pick backend URL: use env var in production, fallback to localhost in dev
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:8080";
 
-  const res = await fetch(`${backendUrl}/api/chat`, {
-    method: "POST",
-    headers: Object.assign(
-      { "Content-Type": "application/json" },
-      token ? { Authorization: `Bearer ${token}` } : {}
-    ),
-    body: JSON.stringify({ message: input }),
-  });
+      const res = await fetch(`${backendUrl}/api/chat`, {
+        method: "POST",
+        headers: Object.assign(
+          { "Content-Type": "application/json" },
+          token ? { Authorization: `Bearer ${token}` } : {}
+        ),
+        body: JSON.stringify({ message: input }),
+      });
 
-  // (optional) handle response here
-  const data = await res.json();
-console.log("Response:", data);
+      // Simple JSON handler: read the full JSON response and update the bot message
+      const data = await res.json();
+      console.log("Response:", data);
 
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder("utf-8");
-      let aiResponse = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        aiResponse += decoder.decode(value, { stream: true });
-
-        // If backend streams JSON objects (or the full body is JSON), try to parse
-        let display = aiResponse;
-        try {
-          const parsed = JSON.parse(aiResponse);
-          if (parsed && typeof parsed.reply === 'string') {
-            display = parsed.reply;
-          }
-        } catch (e) {
-          // not JSON yet — keep raw accumulated text
-        }
-
-        // Update latest bot message as stream progresses with parsed reply when available
-        setMessages((prev) => {
-          const updated = [...prev];
-          updated[updated.length - 1].text = display;
-          return updated;
-        });
-      }
+      setMessages((prev) => {
+        const updated = [...prev];
+        updated[updated.length - 1].text = data.reply || data.text || "⚠️ No reply received.";
+        return updated;
+      });
     } catch (error) {
       console.error("Error sending message:", error);
       setMessages((prev) => {
@@ -87,7 +63,7 @@ console.log("Response:", data);
     <div className={"chatbot" + (messages.length ? ' chatbot--expanded' : '')}>
       <div className="chatbot__window">
         <div className="window__header">
-          <div className="traffic-lights" aria-hidden>
+          <div className="traffic-lights" aria-hidden="true">
             <span className="light light--red" />
             <span className="light light--yellow" />
             <span className="light light--green" />
