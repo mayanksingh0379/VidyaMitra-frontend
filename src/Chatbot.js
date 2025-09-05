@@ -18,13 +18,26 @@ export default function Chatbot() {
     setInput("");
 
     try {
-      // include saved Google token (if available) in Authorization header
-      const token = localStorage.getItem('googleToken');
-      const res = await fetch(`${process.env.https://vidyamitra-backend-yu5k.onrender.com}/api/chat`, {
-        method: "POST",
-        headers: Object.assign({ "Content-Type": "application/json" }, token ? { Authorization: `Bearer ${token}` } : {}),
-        body: JSON.stringify({ message: input }),
-      });
+  // include saved Google token (if available) in Authorization header
+  const token = localStorage.getItem("googleToken");
+
+  // pick backend URL: use env var in production, fallback to localhost in dev
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8080";
+
+  const res = await fetch(`${backendUrl}/api/chat`, {
+    method: "POST",
+    headers: Object.assign(
+      { "Content-Type": "application/json" },
+      token ? { Authorization: `Bearer ${token}` } : {}
+    ),
+    body: JSON.stringify({ message: input }),
+  });
+
+  // (optional) handle response here
+  const data = await res.json();
+console.log("Response:", data);
+
 
       const reader = res.body.getReader();
       const decoder = new TextDecoder("utf-8");
