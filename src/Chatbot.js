@@ -20,7 +20,7 @@ export default function Chatbot() {
     try {
       // include saved Google token (if available) in Authorization header
       const token = localStorage.getItem('googleToken');
-      const res = await fetch("http://localhost:8080/api/chat", {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/chat`, {
         method: "POST",
         headers: Object.assign({ "Content-Type": "application/json" }, token ? { Authorization: `Bearer ${token}` } : {}),
         body: JSON.stringify({ message: input }),
