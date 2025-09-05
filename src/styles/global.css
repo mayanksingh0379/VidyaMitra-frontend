@@ -1,3 +1,63 @@
+/* Chatbot message bubble styles for improved readability */
+
+/* Chatbot message bubble styles - playful, vibrant, rounded */
+.message {
+  padding: 1.1rem 1.5rem;
+  margin: 12px 0;
+  border-radius: var(--radius-xl);
+  max-width: 85%;
+  line-height: 1.7;
+  font-size: 1.05rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition), background var(--transition);
+}
+.message.bot {
+  background: linear-gradient(135deg, #fef3f2, #fff5f5);
+  color: var(--ink);
+  align-self: flex-start;
+  border: 1.5px solid rgba(255,107,53,0.10);
+  box-shadow: var(--shadow);
+}
+.message.user {
+  background: var(--gradient-primary);
+  color: white;
+  align-self: flex-end;
+  box-shadow: var(--shadow-colored);
+  border: none;
+}
+.message ul {
+  list-style: disc inside;
+  margin-left: 24px;
+  margin-bottom: 10px;
+}
+.message strong {
+  font-weight: 700;
+}
+/* Better markdown structure for chatbot replies */
+.chatbot__stream h1,
+.chatbot__stream h2,
+.chatbot__stream h3 {
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 6px;
+}
+.chatbot__stream ul {
+  list-style: disc inside;
+  margin-left: 24px;
+  margin-bottom: 10px;
+}
+.chatbot__stream ol {
+  list-style: decimal inside;
+  margin-left: 24px;
+  margin-bottom: 10px;
+}
+.chatbot__stream li {
+  margin-bottom: 4px;
+}
 /* =============================================================
    Global Light & Playful Theme for Career Guidance Website
    - Bright, cheerful colors inspired by Afterboards
@@ -298,6 +358,56 @@ html::after {
   transition: all var(--transition); 
 }
 
+/* Avatar button in navbar */
+.nav__avatar {
+  width: 40px;
+  height: 40px;
+  padding: 2px;
+  border-radius: 999px;
+  background: transparent;
+  border: 2px solid rgba(255,255,255,0.06);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.nav__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 999px;
+}
+.nav__avatar:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+
+/* Avatar dropdown menu */
+.nav__avatar-wrap { position: relative; }
+.nav__avatar-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  background: white;
+  border-radius: 12px;
+  padding: 8px;
+  min-width: 160px;
+  box-shadow: 0 12px 30px rgba(10,10,10,0.12);
+  border: 1px solid rgba(0,0,0,0.06);
+  z-index: 80;
+}
+.nav__avatar-menu-item {
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--ink);
+  border-radius: 8px;
+}
+.nav__avatar-menu-item:hover { background: rgba(255,107,53,0.06); }
+.nav__avatar-menu-divider { height: 1px; background: rgba(0,0,0,0.04); margin: 6px 0; }
+
 .nav__link:hover { 
   color: var(--primary); 
   background: rgba(255,107,53,0.08);
@@ -349,6 +459,20 @@ html::after {
     position: absolute; 
     top: calc(100% + 8px); 
     left: 50%; 
+
+/* Mobile: ensure content isn't hidden under the fixed nav and headings remain readable */
+@media (max-width: 600px) {
+  /* The nav is fixed and taller on mobile; give the main content breathing room */
+  .main { padding-top: 6.5rem; }
+
+  /* Ensure very large hero headings don't shrink too small or get clipped */
+  .home-greeting {
+    font-size: clamp(2rem, 8vw, 3.2rem);
+    line-height: 1.12;
+  }
+  /* Make sure section titles have enough top margin on mobile */
+  .section { padding-top: 2.5rem; }
+}
     transform: translateX(-50%); 
     width: calc(100% - 2rem); 
     max-width: var(--maxw); 
@@ -1060,13 +1184,17 @@ body[data-page="resources"] {
   /* reduce main vertical padding so content sits higher on small screens */
   .main { padding: 3rem 0 1.5rem; }
 
-  /* hero tweaks for small screens */
-  .home-hero { padding: 1.25rem 0 0; text-align: left; }
+  /* hero tweaks for small screens: center heading and subtitle and add breathing room */
+  .home-hero { padding: 2.25rem 0 0.75rem; text-align: center; }
   .home-greeting {
-    font-size: clamp(1.6rem, 9vw, 2.6rem);
+    /* slightly larger on phones for better presence */
+    font-size: clamp(2rem, 11vw, 3.2rem);
     margin-bottom: 0.5rem;
+    display: block;
+    width: 100%;
+    -webkit-font-smoothing: antialiased;
   }
-  .section__subtitle { font-size: 1rem; margin-top: 0.35rem; text-align: left; }
+  .section__subtitle { font-size: 1rem; margin-top: 0.35rem; text-align: center; }
   .section__title { font-size: clamp(1.4rem, 7vw, 2rem); }
 
   /* Force exam and skill grids to single column on phones for readability */
@@ -1108,11 +1236,59 @@ body[data-page="resources"] {
 
   /* Increase touch target for toggles */
   .nav__link { padding: 0.75rem 1rem; }
+
+  /* Chatbot: make the chatbox more spacious and touch-friendly on phones */
+  .chatbot-container { margin-top: 3rem; padding: 0 0.6rem; }
+
+  .chatbot {
+    width: 100%;
+    max-width: 720px;
+    padding: 1rem;
+    min-height: 320px;
+    max-height: 72vh;
+    box-shadow: var(--shadow);
+  }
+
+  .chatbot__body { padding: 1rem; }
+
+  .chatbot__stream {
+    gap: 0.75rem;
+    padding: 0.35rem;
+    /* allow stream to grow but keep room for input area */
+    max-height: calc(72vh - 120px);
+  }
+
+  /* Make message bubbles use full width and slightly smaller padding for more readable lines */
+  .message {
+    max-width: 100%;
+    padding: 0.85rem 1rem;
+    font-size: 0.98rem;
+  }
+
+  .message.bot { border-width: 1px; }
+
+  /* Stack input and button vertically on narrow screens for easier taps */
+  .chatbot__input {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+    padding-top: 0.75rem;
+    border-top-width: 1px;
+  }
+
+  .chatbot__input .input { padding: 0.9rem 1rem; font-size: 1rem; }
+  .chatbot__input .btn { width: 100%; padding: 0.85rem 1rem; font-size: 1rem; }
+
+  /* Slightly reduce header chrome to save vertical space */
+  .window__header { padding: 8px 12px; }
+  .window__title { font-size: 0.9rem; }
+  /* spacing between chat and next section */
+  .mission-section { margin-top: 3.25rem; }
+  .home-quote { margin-top: 3rem; padding: 3rem 1rem; }
 }
 
 /* Extra-small phones — minor tweaks for cramped displays */
 @media (max-width: 420px) {
-  .home-greeting { font-size: 1.8rem; }
+  .home-greeting { font-size: 2.2rem; }
   .section__subtitle { font-size: 0.95rem; }
   .career-card.card { padding: 0.75rem; }
 }
